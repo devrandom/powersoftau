@@ -12,9 +12,9 @@ macro_rules! curve_impl {
     ) => {
         #[derive(Copy, Clone, PartialEq, Eq, Debug)]
         pub struct $affine {
-            pub(crate) x: $basefield,
-            pub(crate) y: $basefield,
-            pub(crate) infinity: bool
+            pub x: $basefield,
+            pub y: $basefield,
+            pub infinity: bool
         }
 
         impl ::std::fmt::Display for $affine
@@ -30,9 +30,9 @@ macro_rules! curve_impl {
 
         #[derive(Copy, Clone, Debug, Eq)]
         pub struct $projective {
-           pub(crate) x: $basefield,
-           pub(crate) y: $basefield,
-           pub(crate) z: $basefield
+           pub x: $basefield,
+           pub y: $basefield,
+           pub z: $basefield
         }
 
         impl ::std::fmt::Display for $projective
@@ -909,7 +909,7 @@ pub mod g1 {
     }
 
     #[derive(Clone, Debug)]
-    pub struct G1Prepared(pub(crate) G1Affine);
+    pub struct G1Prepared(pub G1Affine);
 
     impl G1Prepared {
         pub fn is_zero(&self) -> bool {
@@ -1414,8 +1414,8 @@ pub mod g2 {
 
     #[derive(Clone, Debug)]
     pub struct G2Prepared {
-        pub(crate) coeffs: Vec<(Fq2, Fq2, Fq2)>,
-        pub(crate) infinity: bool
+        pub coeffs: Vec<(Fq2, Fq2, Fq2)>,
+        pub infinity: bool
     }
 
     #[test]

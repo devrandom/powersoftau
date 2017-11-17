@@ -17,6 +17,8 @@
 // Force public structures to implement Debug
 #![deny(missing_debug_implementations)]
 
+//#![feature(associated_consts,pub_restricted)]
+
 extern crate rand;
 extern crate byteorder;
 
@@ -541,17 +543,17 @@ pub trait PrimeField: Field
     fn char() -> Self::Repr;
 
     /// How many bits are needed to represent an element of this field.
-    const NUM_BITS: u32;
+    // const NUM_BITS: u32;
 
     /// How many bits of information can be reliably stored in the field element.
-    const CAPACITY: u32;
+    // const CAPACITY: u32;
 
     /// Returns the multiplicative generator of `char()` - 1 order. This element
     /// must also be quadratic nonresidue.
     fn multiplicative_generator() -> Self;
 
     /// 2^s * t = `char()` - 1 with t odd.
-    const S: u32;
+    // const S: u32;
 
     /// Returns the 2^s root of unity computed by exponentiating the `multiplicative_generator()`
     /// by t.
@@ -620,8 +622,8 @@ mod arith {
     /// Calculate a - b - borrow, returning the result and modifying
     /// the borrow value.
     #[inline(always)]
-    pub(crate) fn sbb(a: u64, b: u64, borrow: &mut u64) -> u64 {
-        let tmp = (1u128 << 64) + u128::from(a) - u128::from(b) - u128::from(*borrow);
+    pub fn sbb(a: u64, b: u64, borrow: &mut u64) -> u64 {
+        let tmp = (u128::from(1) << 64) + u128::from(a) - u128::from(b) - u128::from(*borrow);
 
         *borrow = if tmp >> 64 == 0 { 1 } else { 0 };
 
@@ -631,7 +633,7 @@ mod arith {
     /// Calculate a + b + carry, returning the sum and modifying the
     /// carry value.
     #[inline(always)]
-    pub(crate) fn adc(a: u64, b: u64, carry: &mut u64) -> u64 {
+    pub fn adc(a: u64, b: u64, carry: &mut u64) -> u64 {
         let tmp = u128::from(a) + u128::from(b) + u128::from(*carry);
 
         *carry = (tmp >> 64) as u64;
@@ -642,7 +644,7 @@ mod arith {
     /// Calculate a + (b * c) + carry, returning the least significant digit
     /// and setting carry to the most significant digit.
     #[inline(always)]
-    pub(crate) fn mac_with_carry(a: u64, b: u64, c: u64, carry: &mut u64) -> u64 {
+    pub fn mac_with_carry(a: u64, b: u64, c: u64, carry: &mut u64) -> u64 {
         let tmp = (u128::from(a)) + u128::from(b) * u128::from(c) + u128::from(*carry);
 
         *carry = (tmp >> 64) as u64;
@@ -664,7 +666,7 @@ mod arith {
     }
 
     #[inline(always)]
-    pub(crate) fn sbb(a: u64, b: u64, borrow: &mut u64) -> u64 {
+    pub fn sbb(a: u64, b: u64, borrow: &mut u64) -> u64 {
         let (a_hi, a_lo) = split_u64(a);
         let (b_hi, b_lo) = split_u64(b);
         let (b, r0) = split_u64((1 << 32) + a_lo - b_lo - *borrow);
@@ -676,7 +678,7 @@ mod arith {
     }
 
     #[inline(always)]
-    pub(crate) fn adc(a: u64, b: u64, carry: &mut u64) -> u64 {
+    pub fn adc(a: u64, b: u64, carry: &mut u64) -> u64 {
         let (a_hi, a_lo) = split_u64(a);
         let (b_hi, b_lo) = split_u64(b);
         let (carry_hi, carry_lo) = split_u64(*carry);
@@ -690,7 +692,7 @@ mod arith {
     }
 
     #[inline(always)]
-    pub(crate) fn mac_with_carry(a: u64, b: u64, c: u64, carry: &mut u64) -> u64 {
+    pub fn mac_with_carry(a: u64, b: u64, c: u64, carry: &mut u64) -> u64 {
         /*
                                 [  b_hi  |  b_lo  ]
                                 [  c_hi  |  c_lo  ] *
