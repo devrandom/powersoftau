@@ -7,7 +7,8 @@ set -ex
 
 rm -rf target
 
-RUSTC="$HOME/opt/rust-1.15.0/bin/rustc"
+RUST_VERSION=1.13.0
+RUSTC="$HOME/opt/rust-$RUST_VERSION/bin/rustc"
 #RUSTC=rustc
 ARGS="--cap-lints allow -C debuginfo=2 --emit=dep-info,link"
 DEPS_OUT_DIR="/home/vagrant/src/powersoftau/target/debug/deps"

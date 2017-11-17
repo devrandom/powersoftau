@@ -1,6 +1,7 @@
 use ::{Field, PrimeField, SqrtField, PrimeFieldRepr, PrimeFieldDecodingError};
 use std::cmp::Ordering;
 use super::fq2::Fq2;
+use ::arith::*;
 
 // q = 4002409555221667393417789825735904156556882819939007885332058136124031650490837864442687629129015664037894272559787
 const MODULUS: FqRepr = FqRepr([0xb9feffffffffaaab, 0x1eabfffeb153ffff, 0x6730d2a0f6b0f624, 0x64774b84f38512bf, 0x4b1ba7b6434bacd7, 0x1a0111ea397fe69a]);
@@ -368,7 +369,7 @@ impl PrimeFieldRepr for FqRepr {
         let mut carry = 0;
 
         for (a, b) in self.0.iter_mut().zip(other.0.iter()) {
-            *a = ::adc(*a, *b, &mut carry);
+            *a = adc(*a, *b, &mut carry);
         }
 
         carry != 0
@@ -379,7 +380,7 @@ impl PrimeFieldRepr for FqRepr {
         let mut borrow = 0;
 
         for (a, b) in self.0.iter_mut().zip(other.0.iter()) {
-            *a = ::sbb(*a, *b, &mut borrow);
+            *a = sbb(*a, *b, &mut borrow);
         }
 
         borrow != 0
@@ -589,52 +590,52 @@ impl Field for Fq {
     fn mul_assign(&mut self, other: &Fq)
     {
         let mut carry = 0;
-        let r0 = ::mac_with_carry(0, (self.0).0[0], (other.0).0[0], &mut carry);
-        let r1 = ::mac_with_carry(0, (self.0).0[0], (other.0).0[1], &mut carry);
-        let r2 = ::mac_with_carry(0, (self.0).0[0], (other.0).0[2], &mut carry);
-        let r3 = ::mac_with_carry(0, (self.0).0[0], (other.0).0[3], &mut carry);
-        let r4 = ::mac_with_carry(0, (self.0).0[0], (other.0).0[4], &mut carry);
-        let r5 = ::mac_with_carry(0, (self.0).0[0], (other.0).0[5], &mut carry);
+        let r0 = mac_with_carry(0, (self.0).0[0], (other.0).0[0], &mut carry);
+        let r1 = mac_with_carry(0, (self.0).0[0], (other.0).0[1], &mut carry);
+        let r2 = mac_with_carry(0, (self.0).0[0], (other.0).0[2], &mut carry);
+        let r3 = mac_with_carry(0, (self.0).0[0], (other.0).0[3], &mut carry);
+        let r4 = mac_with_carry(0, (self.0).0[0], (other.0).0[4], &mut carry);
+        let r5 = mac_with_carry(0, (self.0).0[0], (other.0).0[5], &mut carry);
         let r6 = carry;
         let mut carry = 0;
-        let r1 = ::mac_with_carry(r1, (self.0).0[1], (other.0).0[0], &mut carry);
-        let r2 = ::mac_with_carry(r2, (self.0).0[1], (other.0).0[1], &mut carry);
-        let r3 = ::mac_with_carry(r3, (self.0).0[1], (other.0).0[2], &mut carry);
-        let r4 = ::mac_with_carry(r4, (self.0).0[1], (other.0).0[3], &mut carry);
-        let r5 = ::mac_with_carry(r5, (self.0).0[1], (other.0).0[4], &mut carry);
-        let r6 = ::mac_with_carry(r6, (self.0).0[1], (other.0).0[5], &mut carry);
+        let r1 = mac_with_carry(r1, (self.0).0[1], (other.0).0[0], &mut carry);
+        let r2 = mac_with_carry(r2, (self.0).0[1], (other.0).0[1], &mut carry);
+        let r3 = mac_with_carry(r3, (self.0).0[1], (other.0).0[2], &mut carry);
+        let r4 = mac_with_carry(r4, (self.0).0[1], (other.0).0[3], &mut carry);
+        let r5 = mac_with_carry(r5, (self.0).0[1], (other.0).0[4], &mut carry);
+        let r6 = mac_with_carry(r6, (self.0).0[1], (other.0).0[5], &mut carry);
         let r7 = carry;
         let mut carry = 0;
-        let r2 = ::mac_with_carry(r2, (self.0).0[2], (other.0).0[0], &mut carry);
-        let r3 = ::mac_with_carry(r3, (self.0).0[2], (other.0).0[1], &mut carry);
-        let r4 = ::mac_with_carry(r4, (self.0).0[2], (other.0).0[2], &mut carry);
-        let r5 = ::mac_with_carry(r5, (self.0).0[2], (other.0).0[3], &mut carry);
-        let r6 = ::mac_with_carry(r6, (self.0).0[2], (other.0).0[4], &mut carry);
-        let r7 = ::mac_with_carry(r7, (self.0).0[2], (other.0).0[5], &mut carry);
+        let r2 = mac_with_carry(r2, (self.0).0[2], (other.0).0[0], &mut carry);
+        let r3 = mac_with_carry(r3, (self.0).0[2], (other.0).0[1], &mut carry);
+        let r4 = mac_with_carry(r4, (self.0).0[2], (other.0).0[2], &mut carry);
+        let r5 = mac_with_carry(r5, (self.0).0[2], (other.0).0[3], &mut carry);
+        let r6 = mac_with_carry(r6, (self.0).0[2], (other.0).0[4], &mut carry);
+        let r7 = mac_with_carry(r7, (self.0).0[2], (other.0).0[5], &mut carry);
         let r8 = carry;
         let mut carry = 0;
-        let r3 = ::mac_with_carry(r3, (self.0).0[3], (other.0).0[0], &mut carry);
-        let r4 = ::mac_with_carry(r4, (self.0).0[3], (other.0).0[1], &mut carry);
-        let r5 = ::mac_with_carry(r5, (self.0).0[3], (other.0).0[2], &mut carry);
-        let r6 = ::mac_with_carry(r6, (self.0).0[3], (other.0).0[3], &mut carry);
-        let r7 = ::mac_with_carry(r7, (self.0).0[3], (other.0).0[4], &mut carry);
-        let r8 = ::mac_with_carry(r8, (self.0).0[3], (other.0).0[5], &mut carry);
+        let r3 = mac_with_carry(r3, (self.0).0[3], (other.0).0[0], &mut carry);
+        let r4 = mac_with_carry(r4, (self.0).0[3], (other.0).0[1], &mut carry);
+        let r5 = mac_with_carry(r5, (self.0).0[3], (other.0).0[2], &mut carry);
+        let r6 = mac_with_carry(r6, (self.0).0[3], (other.0).0[3], &mut carry);
+        let r7 = mac_with_carry(r7, (self.0).0[3], (other.0).0[4], &mut carry);
+        let r8 = mac_with_carry(r8, (self.0).0[3], (other.0).0[5], &mut carry);
         let r9 = carry;
         let mut carry = 0;
-        let r4 = ::mac_with_carry(r4, (self.0).0[4], (other.0).0[0], &mut carry);
-        let r5 = ::mac_with_carry(r5, (self.0).0[4], (other.0).0[1], &mut carry);
-        let r6 = ::mac_with_carry(r6, (self.0).0[4], (other.0).0[2], &mut carry);
-        let r7 = ::mac_with_carry(r7, (self.0).0[4], (other.0).0[3], &mut carry);
-        let r8 = ::mac_with_carry(r8, (self.0).0[4], (other.0).0[4], &mut carry);
-        let r9 = ::mac_with_carry(r9, (self.0).0[4], (other.0).0[5], &mut carry);
+        let r4 = mac_with_carry(r4, (self.0).0[4], (other.0).0[0], &mut carry);
+        let r5 = mac_with_carry(r5, (self.0).0[4], (other.0).0[1], &mut carry);
+        let r6 = mac_with_carry(r6, (self.0).0[4], (other.0).0[2], &mut carry);
+        let r7 = mac_with_carry(r7, (self.0).0[4], (other.0).0[3], &mut carry);
+        let r8 = mac_with_carry(r8, (self.0).0[4], (other.0).0[4], &mut carry);
+        let r9 = mac_with_carry(r9, (self.0).0[4], (other.0).0[5], &mut carry);
         let r10 = carry;
         let mut carry = 0;
-        let r5 = ::mac_with_carry(r5, (self.0).0[5], (other.0).0[0], &mut carry);
-        let r6 = ::mac_with_carry(r6, (self.0).0[5], (other.0).0[1], &mut carry);
-        let r7 = ::mac_with_carry(r7, (self.0).0[5], (other.0).0[2], &mut carry);
-        let r8 = ::mac_with_carry(r8, (self.0).0[5], (other.0).0[3], &mut carry);
-        let r9 = ::mac_with_carry(r9, (self.0).0[5], (other.0).0[4], &mut carry);
-        let r10 = ::mac_with_carry(r10, (self.0).0[5], (other.0).0[5], &mut carry);
+        let r5 = mac_with_carry(r5, (self.0).0[5], (other.0).0[0], &mut carry);
+        let r6 = mac_with_carry(r6, (self.0).0[5], (other.0).0[1], &mut carry);
+        let r7 = mac_with_carry(r7, (self.0).0[5], (other.0).0[2], &mut carry);
+        let r8 = mac_with_carry(r8, (self.0).0[5], (other.0).0[3], &mut carry);
+        let r9 = mac_with_carry(r9, (self.0).0[5], (other.0).0[4], &mut carry);
+        let r10 = mac_with_carry(r10, (self.0).0[5], (other.0).0[5], &mut carry);
         let r11 = carry;
         self.mont_reduce(r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11);
     }
@@ -643,29 +644,29 @@ impl Field for Fq {
     fn square(&mut self)
     {
         let mut carry = 0;
-        let r1 = ::mac_with_carry(0, (self.0).0[0], (self.0).0[1], &mut carry);
-        let r2 = ::mac_with_carry(0, (self.0).0[0], (self.0).0[2], &mut carry);
-        let r3 = ::mac_with_carry(0, (self.0).0[0], (self.0).0[3], &mut carry);
-        let r4 = ::mac_with_carry(0, (self.0).0[0], (self.0).0[4], &mut carry);
-        let r5 = ::mac_with_carry(0, (self.0).0[0], (self.0).0[5], &mut carry);
+        let r1 = mac_with_carry(0, (self.0).0[0], (self.0).0[1], &mut carry);
+        let r2 = mac_with_carry(0, (self.0).0[0], (self.0).0[2], &mut carry);
+        let r3 = mac_with_carry(0, (self.0).0[0], (self.0).0[3], &mut carry);
+        let r4 = mac_with_carry(0, (self.0).0[0], (self.0).0[4], &mut carry);
+        let r5 = mac_with_carry(0, (self.0).0[0], (self.0).0[5], &mut carry);
         let r6 = carry;
         let mut carry = 0;
-        let r3 = ::mac_with_carry(r3, (self.0).0[1], (self.0).0[2], &mut carry);
-        let r4 = ::mac_with_carry(r4, (self.0).0[1], (self.0).0[3], &mut carry);
-        let r5 = ::mac_with_carry(r5, (self.0).0[1], (self.0).0[4], &mut carry);
-        let r6 = ::mac_with_carry(r6, (self.0).0[1], (self.0).0[5], &mut carry);
+        let r3 = mac_with_carry(r3, (self.0).0[1], (self.0).0[2], &mut carry);
+        let r4 = mac_with_carry(r4, (self.0).0[1], (self.0).0[3], &mut carry);
+        let r5 = mac_with_carry(r5, (self.0).0[1], (self.0).0[4], &mut carry);
+        let r6 = mac_with_carry(r6, (self.0).0[1], (self.0).0[5], &mut carry);
         let r7 = carry;
         let mut carry = 0;
-        let r5 = ::mac_with_carry(r5, (self.0).0[2], (self.0).0[3], &mut carry);
-        let r6 = ::mac_with_carry(r6, (self.0).0[2], (self.0).0[4], &mut carry);
-        let r7 = ::mac_with_carry(r7, (self.0).0[2], (self.0).0[5], &mut carry);
+        let r5 = mac_with_carry(r5, (self.0).0[2], (self.0).0[3], &mut carry);
+        let r6 = mac_with_carry(r6, (self.0).0[2], (self.0).0[4], &mut carry);
+        let r7 = mac_with_carry(r7, (self.0).0[2], (self.0).0[5], &mut carry);
         let r8 = carry;
         let mut carry = 0;
-        let r7 = ::mac_with_carry(r7, (self.0).0[3], (self.0).0[4], &mut carry);
-        let r8 = ::mac_with_carry(r8, (self.0).0[3], (self.0).0[5], &mut carry);
+        let r7 = mac_with_carry(r7, (self.0).0[3], (self.0).0[4], &mut carry);
+        let r8 = mac_with_carry(r8, (self.0).0[3], (self.0).0[5], &mut carry);
         let r9 = carry;
         let mut carry = 0;
-        let r9 = ::mac_with_carry(r9, (self.0).0[4], (self.0).0[5], &mut carry);
+        let r9 = mac_with_carry(r9, (self.0).0[4], (self.0).0[5], &mut carry);
         let r10 = carry;
 
         let r11 = r10 >> 63;
@@ -681,18 +682,18 @@ impl Field for Fq {
         let r1 = r1 << 1;
 
         let mut carry = 0;
-        let r0 = ::mac_with_carry(0, (self.0).0[0], (self.0).0[0], &mut carry);
-        let r1 = ::adc(r1, 0, &mut carry);
-        let r2 = ::mac_with_carry(r2, (self.0).0[1], (self.0).0[1], &mut carry);
-        let r3 = ::adc(r3, 0, &mut carry);
-        let r4 = ::mac_with_carry(r4, (self.0).0[2], (self.0).0[2], &mut carry);
-        let r5 = ::adc(r5, 0, &mut carry);
-        let r6 = ::mac_with_carry(r6, (self.0).0[3], (self.0).0[3], &mut carry);
-        let r7 = ::adc(r7, 0, &mut carry);
-        let r8 = ::mac_with_carry(r8, (self.0).0[4], (self.0).0[4], &mut carry);
-        let r9 = ::adc(r9, 0, &mut carry);
-        let r10 = ::mac_with_carry(r10, (self.0).0[5], (self.0).0[5], &mut carry);
-        let r11 = ::adc(r11, 0, &mut carry);
+        let r0 = mac_with_carry(0, (self.0).0[0], (self.0).0[0], &mut carry);
+        let r1 = adc(r1, 0, &mut carry);
+        let r2 = mac_with_carry(r2, (self.0).0[1], (self.0).0[1], &mut carry);
+        let r3 = adc(r3, 0, &mut carry);
+        let r4 = mac_with_carry(r4, (self.0).0[2], (self.0).0[2], &mut carry);
+        let r5 = adc(r5, 0, &mut carry);
+        let r6 = mac_with_carry(r6, (self.0).0[3], (self.0).0[3], &mut carry);
+        let r7 = adc(r7, 0, &mut carry);
+        let r8 = mac_with_carry(r8, (self.0).0[4], (self.0).0[4], &mut carry);
+        let r9 = adc(r9, 0, &mut carry);
+        let r10 = mac_with_carry(r10, (self.0).0[5], (self.0).0[5], &mut carry);
+        let r11 = adc(r11, 0, &mut carry);
         self.mont_reduce(r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11);
     }
 }
@@ -737,63 +738,63 @@ impl Fq {
 
         let k = r0.wrapping_mul(INV);
         let mut carry = 0;
-        ::mac_with_carry(r0, k, MODULUS.0[0], &mut carry);
-        r1 = ::mac_with_carry(r1, k, MODULUS.0[1], &mut carry);
-        r2 = ::mac_with_carry(r2, k, MODULUS.0[2], &mut carry);
-        r3 = ::mac_with_carry(r3, k, MODULUS.0[3], &mut carry);
-        r4 = ::mac_with_carry(r4, k, MODULUS.0[4], &mut carry);
-        r5 = ::mac_with_carry(r5, k, MODULUS.0[5], &mut carry);
-        r6 = ::adc(r6, 0, &mut carry);
+        mac_with_carry(r0, k, MODULUS.0[0], &mut carry);
+        r1 = mac_with_carry(r1, k, MODULUS.0[1], &mut carry);
+        r2 = mac_with_carry(r2, k, MODULUS.0[2], &mut carry);
+        r3 = mac_with_carry(r3, k, MODULUS.0[3], &mut carry);
+        r4 = mac_with_carry(r4, k, MODULUS.0[4], &mut carry);
+        r5 = mac_with_carry(r5, k, MODULUS.0[5], &mut carry);
+        r6 = adc(r6, 0, &mut carry);
         let carry2 = carry;
         let k = r1.wrapping_mul(INV);
         let mut carry = 0;
-        ::mac_with_carry(r1, k, MODULUS.0[0], &mut carry);
-        r2 = ::mac_with_carry(r2, k, MODULUS.0[1], &mut carry);
-        r3 = ::mac_with_carry(r3, k, MODULUS.0[2], &mut carry);
-        r4 = ::mac_with_carry(r4, k, MODULUS.0[3], &mut carry);
-        r5 = ::mac_with_carry(r5, k, MODULUS.0[4], &mut carry);
-        r6 = ::mac_with_carry(r6, k, MODULUS.0[5], &mut carry);
-        r7 = ::adc(r7, carry2, &mut carry);
+        mac_with_carry(r1, k, MODULUS.0[0], &mut carry);
+        r2 = mac_with_carry(r2, k, MODULUS.0[1], &mut carry);
+        r3 = mac_with_carry(r3, k, MODULUS.0[2], &mut carry);
+        r4 = mac_with_carry(r4, k, MODULUS.0[3], &mut carry);
+        r5 = mac_with_carry(r5, k, MODULUS.0[4], &mut carry);
+        r6 = mac_with_carry(r6, k, MODULUS.0[5], &mut carry);
+        r7 = adc(r7, carry2, &mut carry);
         let carry2 = carry;
         let k = r2.wrapping_mul(INV);
         let mut carry = 0;
-        ::mac_with_carry(r2, k, MODULUS.0[0], &mut carry);
-        r3 = ::mac_with_carry(r3, k, MODULUS.0[1], &mut carry);
-        r4 = ::mac_with_carry(r4, k, MODULUS.0[2], &mut carry);
-        r5 = ::mac_with_carry(r5, k, MODULUS.0[3], &mut carry);
-        r6 = ::mac_with_carry(r6, k, MODULUS.0[4], &mut carry);
-        r7 = ::mac_with_carry(r7, k, MODULUS.0[5], &mut carry);
-        r8 = ::adc(r8, carry2, &mut carry);
+        mac_with_carry(r2, k, MODULUS.0[0], &mut carry);
+        r3 = mac_with_carry(r3, k, MODULUS.0[1], &mut carry);
+        r4 = mac_with_carry(r4, k, MODULUS.0[2], &mut carry);
+        r5 = mac_with_carry(r5, k, MODULUS.0[3], &mut carry);
+        r6 = mac_with_carry(r6, k, MODULUS.0[4], &mut carry);
+        r7 = mac_with_carry(r7, k, MODULUS.0[5], &mut carry);
+        r8 = adc(r8, carry2, &mut carry);
         let carry2 = carry;
         let k = r3.wrapping_mul(INV);
         let mut carry = 0;
-        ::mac_with_carry(r3, k, MODULUS.0[0], &mut carry);
-        r4 = ::mac_with_carry(r4, k, MODULUS.0[1], &mut carry);
-        r5 = ::mac_with_carry(r5, k, MODULUS.0[2], &mut carry);
-        r6 = ::mac_with_carry(r6, k, MODULUS.0[3], &mut carry);
-        r7 = ::mac_with_carry(r7, k, MODULUS.0[4], &mut carry);
-        r8 = ::mac_with_carry(r8, k, MODULUS.0[5], &mut carry);
-        r9 = ::adc(r9, carry2, &mut carry);
+        mac_with_carry(r3, k, MODULUS.0[0], &mut carry);
+        r4 = mac_with_carry(r4, k, MODULUS.0[1], &mut carry);
+        r5 = mac_with_carry(r5, k, MODULUS.0[2], &mut carry);
+        r6 = mac_with_carry(r6, k, MODULUS.0[3], &mut carry);
+        r7 = mac_with_carry(r7, k, MODULUS.0[4], &mut carry);
+        r8 = mac_with_carry(r8, k, MODULUS.0[5], &mut carry);
+        r9 = adc(r9, carry2, &mut carry);
         let carry2 = carry;
         let k = r4.wrapping_mul(INV);
         let mut carry = 0;
-        ::mac_with_carry(r4, k, MODULUS.0[0], &mut carry);
-        r5 = ::mac_with_carry(r5, k, MODULUS.0[1], &mut carry);
-        r6 = ::mac_with_carry(r6, k, MODULUS.0[2], &mut carry);
-        r7 = ::mac_with_carry(r7, k, MODULUS.0[3], &mut carry);
-        r8 = ::mac_with_carry(r8, k, MODULUS.0[4], &mut carry);
-        r9 = ::mac_with_carry(r9, k, MODULUS.0[5], &mut carry);
-        r10 = ::adc(r10, carry2, &mut carry);
+        mac_with_carry(r4, k, MODULUS.0[0], &mut carry);
+        r5 = mac_with_carry(r5, k, MODULUS.0[1], &mut carry);
+        r6 = mac_with_carry(r6, k, MODULUS.0[2], &mut carry);
+        r7 = mac_with_carry(r7, k, MODULUS.0[3], &mut carry);
+        r8 = mac_with_carry(r8, k, MODULUS.0[4], &mut carry);
+        r9 = mac_with_carry(r9, k, MODULUS.0[5], &mut carry);
+        r10 = adc(r10, carry2, &mut carry);
         let carry2 = carry;
         let k = r5.wrapping_mul(INV);
         let mut carry = 0;
-        ::mac_with_carry(r5, k, MODULUS.0[0], &mut carry);
-        r6 = ::mac_with_carry(r6, k, MODULUS.0[1], &mut carry);
-        r7 = ::mac_with_carry(r7, k, MODULUS.0[2], &mut carry);
-        r8 = ::mac_with_carry(r8, k, MODULUS.0[3], &mut carry);
-        r9 = ::mac_with_carry(r9, k, MODULUS.0[4], &mut carry);
-        r10 = ::mac_with_carry(r10, k, MODULUS.0[5], &mut carry);
-        r11 = ::adc(r11, carry2, &mut carry);
+        mac_with_carry(r5, k, MODULUS.0[0], &mut carry);
+        r6 = mac_with_carry(r6, k, MODULUS.0[1], &mut carry);
+        r7 = mac_with_carry(r7, k, MODULUS.0[2], &mut carry);
+        r8 = mac_with_carry(r8, k, MODULUS.0[3], &mut carry);
+        r9 = mac_with_carry(r9, k, MODULUS.0[4], &mut carry);
+        r10 = mac_with_carry(r10, k, MODULUS.0[5], &mut carry);
+        r11 = adc(r11, carry2, &mut carry);
         (self.0).0[0] = r6;
         (self.0).0[1] = r7;
         (self.0).0[2] = r8;
