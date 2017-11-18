@@ -1,3 +1,4 @@
+#![feature(copy_from_slice)]
 #![no_std]
 extern crate constant_time_eq;
 extern crate generic_array;

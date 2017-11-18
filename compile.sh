@@ -2,16 +2,13 @@
 
 set -ex
 
-#$HOME/opt/bin/cargo clean
-#$HOME/opt/bin/cargo build -p typenum
-
 rm -rf target
 
-#RUST_VERSION=1.13.0
 #RUST_VERSION=1.10.0
-RUST_VERSION=2016-07-07
+#RUST_VERSION=2016-07-07
+RUST_VERSION=2016-04-01
 RUSTC="$HOME/opt/rust-$RUST_VERSION/bin/rustc"
-#RUSTC=rustc
+export LD_LIBRARY_PATH="$HOME/opt/rust-$RUST_VERSION/lib"
 ARGS="--cap-lints allow -C debuginfo=2 --emit=dep-info,link"
 DEPS_OUT_DIR="/home/vagrant/src/powersoftau/target/debug/deps"
 DEPS_ARGS="--out-dir $DEPS_OUT_DIR -L dependency=/home/vagrant/src/powersoftau/target/debug/deps"
@@ -22,7 +19,6 @@ mkdir -p target/debug/deps
 $RUSTC --crate-name libc $DEPS_BASE/libc-0.2.32/src/lib.rs --crate-type lib --cfg 'feature="default"' --cfg 'feature="use_std"' $DEPS_ARGS $ARGS
 $RUSTC --crate-name constant_time_eq $DEPS_BASE/constant_time_eq-0.1.3/src/lib.rs --crate-type lib $DEPS_ARGS $ARGS
 $RUSTC --crate-name build_script_main $DEPS_BASE/typenum-1.9.0/build/main.rs --crate-type bin $DEPS_ARGS $ARGS
-#OUT_DIR="$PWD/target/debug/build/typenum-b201dc5f3aa9a2f3/out" /home/vagrant/src/powersoftau/target/debug/build/typenum-1d8f660cc0eb5a26/build-script-main
 TYPENUM_OUTDIR="$PWD/target/debug/build/typenum/out"
 mkdir -p "$TYPENUM_OUTDIR"
 cp typenum/*.rs "$TYPENUM_OUTDIR"

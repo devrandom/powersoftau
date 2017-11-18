@@ -1,3 +1,4 @@
+#![feature(expand_open_options)]
 extern crate powersoftau;
 use powersoftau::*;
 
