@@ -13,7 +13,7 @@ macro_rules! blake2_impl {
         use digest;
         use crypto_mac::{Mac, MacResult};
 
-        type Output = GenericArray<u8, $bytes>;
+        pub type Output = GenericArray<u8, $bytes>;
 
         /// Hash function context.
         #[derive(Copy, Clone, Debug)]

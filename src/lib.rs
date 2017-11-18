@@ -1,3 +1,4 @@
+#![feature(question_mark)]
 //! This ceremony constructs the "powers of tau" for Jens Groth's 2016 zk-SNARK proving
 //! system using the BLS12-381 pairing-friendly elliptic curve construction.
 //!

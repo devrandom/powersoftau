@@ -1,3 +1,4 @@
+#![feature(question_mark)]
 // If the "u128-support" feature is enabled, this library can use
 // more efficient arithmetic. Only available in the nightly compiler.
 #![cfg_attr(feature = "u128-support", feature(i128_type))]

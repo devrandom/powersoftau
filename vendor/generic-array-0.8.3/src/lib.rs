@@ -1,3 +1,4 @@
+#![feature(question_mark)]
 //! This crate implements a structure that can be used as a generic array type.use
 //! Core Rust array types `[T; N]` can't be used generically with respect to `N`,
 //! so for example this:

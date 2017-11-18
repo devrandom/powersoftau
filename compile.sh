@@ -7,7 +7,9 @@ set -ex
 
 rm -rf target
 
-RUST_VERSION=1.13.0
+#RUST_VERSION=1.13.0
+#RUST_VERSION=1.10.0
+RUST_VERSION=2016-07-07
 RUSTC="$HOME/opt/rust-$RUST_VERSION/bin/rustc"
 #RUSTC=rustc
 ARGS="--cap-lints allow -C debuginfo=2 --emit=dep-info,link"

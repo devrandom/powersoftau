@@ -1,3 +1,4 @@
+#![feature(question_mark)]
 //! An implementation of the [BLAKE2][1] hash functions.
 //!
 //! Based on the [work][2] of Cesar Barros.
