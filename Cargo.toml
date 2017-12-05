@@ -17,7 +17,8 @@ blake2 = "0.6.1"
 generic-array = "0.8.3"
 typenum = "1.9.0"
 byteorder = "1.1.0"
-pairing = {git="https://github.com/devrandom/pairing.git", rev="rust_1_19_compat"}
+#pairing = {git="https://github.com/devrandom/pairing.git", rev="rust_1_19_compat"}
+pairing = "0.13.2"
 
 [features]
 u128-support = ["pairing/u128-support"]
