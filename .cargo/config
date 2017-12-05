@@ -1,0 +1,10 @@
+[source.crates-io]
+replace-with = "vendored-sources"
+
+[source."https://github.com/devrandom/pairing.git"]
+git = "https://github.com/devrandom/pairing.git"
+rev = "rust_1_19_compat"
+replace-with = "vendored-sources"
+
+[source.vendored-sources]
+directory = "/home/admin/src/powersoftau/vendor"
